@@ -1,0 +1,54 @@
+/*
+    misc styles, nothing to do with CSS variables
+*/
+
+body {
+    text-align: center;
+    background: #193549;
+    color: white;
+    font-family: 'helvetica neue', sans-serif;
+    font-weight: 100;
+    font-size: 50px;
+}
+
+.controls {
+    margin-bottom: 50px;
+}
+
+a {
+    color: var(--base);
+    text-decoration: none;
+}
+
+input {
+    width:100px;
+}
+
+/* CSS variable styling below */
+
+/* css default variables set on :root, highest level of element similar to html element
+*/
+:root {
+    --base: yellow;
+    --spacing: 10px;
+    --blur: 0px;
+}
+
+img {
+    padding: var(--spacing);
+    background: var(--base);
+    filter: blur(var(--blur));
+}
+
+.hl {
+    color: var(--base);
+}
+
+/*
+CSS Variables are entities defined by CSS authors which contain specific values
+to be reused throughout a document. 
+They are set using custom property notation (e.g. --main-color: black;) and 
+are accessed using the var() function (e.g. color: var(--main-color);) .
+
+https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables
+*/
