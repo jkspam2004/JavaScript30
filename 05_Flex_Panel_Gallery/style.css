@@ -1,0 +1,129 @@
+html {
+    box-sizing: border-box;
+    background: #ffc600; /* yellowish */
+    font-family: 'helvetica neue';
+    font-size: 20px;
+    font-weight: 200;
+}
+body {
+    margin: 0;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+.panels {
+    min-height: 100vh; /* 100% of viewport height */
+    overflow: hidden;
+    display: flex; /* displays each panel side by side */
+}
+
+.panel {
+    background: #6B0F9C; /* purplish */
+    box-shadow: inset 0 0 0 5px rgba(255,255,255,0.1);
+    color: white;
+    text-align: center;
+    align-items: center;
+    /* Safari transitionend event.propertyName === flex */
+    /* Chrome + FF transitionend event.propertyName === flex-grow */
+    transition:
+        font-size 0.7s cubic-bezier(0.61,-0.19, 0.7,-0.11),
+        flex 0.7s cubic-bezier(0.61,-0.19, 0.7,-0.11),
+        background 0.2s;
+    font-size: 20px;
+    background-size: cover;
+    background-position: center;
+    flex: 1; /* evenly distribute extra space */
+    justify-content: center; /* centers left and right */
+    align-items: center;
+    display: flex; /* nested flex item, outer flex container is .panels. centered from top to bottom, flattened text in one line */
+    flex-direction: column; /* text on each line again, vertically centered in the middle */
+}
+
+
+.panel1 { background-image:url(https://source.unsplash.com/gYl-UtwNg_I/1500x1500); }
+.panel2 { background-image:url(https://source.unsplash.com/1CD3fd8kHnE/1500x1500); }
+.panel3 { background-image:url(https://images.unsplash.com/photo-1465188162913-8fb5709d6d57?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&cs=tinysrgb&w=1500&h=1500&fit=crop&s=967e8a713a4e395260793fc8c802901d); }
+.panel4 { background-image:url(https://source.unsplash.com/ITjiVXcwVng/1500x1500); }
+.panel5 { background-image:url(https://source.unsplash.com/3MNzGlQM7qs/1500x1500); }
+
+/* flex children/item */
+/* all the p tags that are immediate children of .panel */
+.panel > * {
+    margin:0;
+    width: 100%;
+    transition: transform 0.5s;
+    /* border: 1px solid red; */ /* used for visualizing boxes */
+    flex: 1 0 auto; /* evenly divides grid boxes */
+    display: flex;
+    justify-content: center; /* centers text horizontally */
+    align-items: center; /* centers text vertically */
+}
+
+.panel > *:first-child { transform: translateY(-100%); } /* hides the text on the top */
+.panel.open-active > *:first-child { transform: translateY(0); } /* brings back text on top */
+.panel > *:last-child { transform: translateY(100%); } /* hides text on bottom */
+.panel.open-active > *:last-child { transform: translateY(0); } /* brings back text on bottom */
+
+.panel p {
+    text-transform: uppercase;
+    font-family: 'Amatic SC', cursive;
+    text-shadow:0 0 4px rgba(0, 0, 0, 0.72), 0 0 14px rgba(0, 0, 0, 0.45);
+    font-size: 2em;
+}
+.panel p:nth-child(2) {
+    font-size: 4em; /* 4 times the size of current font */
+}
+
+.panel.open {
+    font-size: 40px;
+    flex: 5; /* take up 5 times the space than the others */
+}
+
+/*
+css units
+
+em: relative to the font-size of the element (2em means 2 times the size of the current font)
+rem: relative to font-size of the root element
+vw: relative to 1% of the width of the viewport
+vh: relative to 1% of the height of the viewport
+vmin: relative to 1% of viewport's smaller height or width
+vmax: relative to 1% of viewport's greater height or width
+ex: relative to the x-height of the current font (rarely used)
+ch: relative to width of the "0"
+%
+
+viewport = browser window size
+
+~~~~
+
+css selectors:
+
+ex: 1
+<p>
+    <strong><em>foo</em></strong>
+</p>
+
+ex: 2
+<p>
+    Text <em>foo</em> bar
+</p>
+
+child combinator:
+A selector that targets immediate children
+p > em 
+- will match example 2 only
+
+descendant combinator:
+A selector that targets descendants of an element (not necessarily immediate children)
+p em
+- will match examples 1 and 2 above
+
+~~~~
+flex:
+
+display: flex;  displays block elements side by side
+flex: 1;        evenly distribute extra space 
+
+*/
+
