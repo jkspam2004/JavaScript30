@@ -1,10 +1,10 @@
-//{
+{
     const endpoint = "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
     const cities = [];
 
-    fetch(endpoint)
-        .then(blob => blob.json())
-        .then(data => cities.push(...data))
+    fetch(endpoint) // returns a promise
+        .then(blob => blob.json()) // blob.json returns another promise
+        .then(data => cities.push(...data)) // spread appends elements from iterable
 
     function findMatches(wordToMatch, cities) {
         return cities.filter(place => {
@@ -42,7 +42,7 @@
 
     searchInput.addEventListener('change', displayMatches); 
     searchInput.addEventListener('keyup', displayMatches); 
-//}
+}
 
 /*
 fetch: 
