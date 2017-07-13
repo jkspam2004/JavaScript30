@@ -51,14 +51,16 @@
         const index = comments.findIndex((comment) => comment.id === 823423);
         console.log({index}); // { index: 1 }
 
-        // make a copy and omit line
+        // Delete the comment with the ID of 823423
+
+        // 1. make a copy and omit line or ...
         const newComments = [
-            ...comments.slice(0, index),
+            ...comments.slice(0, index), // spread operator to iterate and append
             ...comments.slice(index + 1)
         ];
         console.table(newComments);
 
-        // delete the comment with the ID of 823423
+        // 2. change original array
         comments.splice(index, 1); // removes Super good comment
         console.table(comments);
 
@@ -80,8 +82,6 @@ executes the provided callback function once for each element present in the arr
 it finds one where callback returns a *falsy* value
 
 find()
-returns the value of the first element in the array that satisfies the provided testing function.
-
-
+returns the value of the FIRST element in the array that satisfies the provided testing function.
 
 -->
