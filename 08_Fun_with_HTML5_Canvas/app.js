@@ -10,7 +10,7 @@
     ctx.strokeStyle = "#BADA55";
     ctx.lineJoin = "round";
     ctx.lineCap = "round";
-    ctx.lineWidth = 100;
+    ctx.lineWidth = 50;
     //ctx.globalCompositeOperation = "multiply"; // blends to black
 
     let isDrawing = false;
@@ -27,7 +27,7 @@
         ctx.beginPath();
         ctx.moveTo(lastX, lastY);           // start from here
         ctx.lineTo(e.offsetX, e.offsetY);   // go to here
-        ctx.stroke(); 
+        ctx.stroke();                       // draw! 
 
         [lastX, lastY] = [e.offsetX, e.offsetY];
 
@@ -38,7 +38,7 @@
         }
 
         // change the line width
-        if (ctx.lineWidth >= 100 || ctx.lineWidth <= 1) {
+        if (ctx.lineWidth >= 50 || ctx.lineWidth <= 1) {
             direction = !direction;
         } 
         if (direction) {
@@ -46,8 +46,15 @@
         } else {
             ctx.lineWidth--;
         }
+        ctx.closePath();
     }
 
+    function clearCanvas() {
+        console.log("clear");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // start drawing from current position with mousedown event
     canvas.addEventListener("mousedown", (e) => {
         isDrawing = true;
         [lastX, lastY] = [e.offsetX, e.offsetY];
