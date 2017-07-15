@@ -1,30 +1,30 @@
+/* app.js */
 {
-    const canvas = document.querySelector("#draw");
-    const ctx = canvas.getContext("2d"); // where the drawing is done on canvas
+    /* set up our canvas */
+    var canvas = document.querySelector("#draw");
+    var ctx = canvas.getContext("2d"); // where the drawing is done on canvas
+    var isDrawing = false;
+    var mousePos = { x: 0, y: 0 };
+    var lastPos = mousePos;
+    var hue = 0;
+    var direction = true;
 
-    // set canvas to dimensions to size of window
+    /* set canvas dimensions to size of window */
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    // style our line
+    /* style our line */
     ctx.strokeStyle = "#BADA55";
     ctx.lineJoin = "round";
     ctx.lineCap = "round";
-    ctx.lineWidth = 50;
+    ctx.lineWidth = 30;
     //ctx.globalCompositeOperation = "multiply"; // blends to black
 
-    let isDrawing = false;
-    let lastPos = { x: 0, y: 0 };
-    let mousePos = lastPos;
-    let hue = 0;
-    let direction = true;
 
     /* draw the line */
-    function draw(e) {
+    function renderCanvas() {
         if (!isDrawing) return;
-        console.log(e);
         ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
-        mousePos = getMousePos(e);
 
         ctx.beginPath();
         ctx.moveTo(lastPos.x, lastPos.y);   // start from here
@@ -38,6 +38,7 @@
         ctx.closePath();
     }
 
+    /* get current mouse position */
     function getMousePos(e) {
         return {
             x : e.offsetX,
@@ -45,6 +46,7 @@
         }
     }
 
+    /* get current touch position */
     function getTouchPos(e) {
         return {
             x : e.touches[0].clientX,
@@ -62,7 +64,7 @@
 
     /* change the line width */
     function changeLineWidth() {
-        if (ctx.lineWidth >= 50 || ctx.lineWidth <= 1) {
+        if (ctx.lineWidth >= 30 || ctx.lineWidth <= 1) {
             direction = !direction;
         } 
         if (direction) {
@@ -83,56 +85,28 @@
         isDrawing = true;
         lastPos = getMousePos(e);
     });
-
-    canvas.addEventListener("mousemove", draw);
+    canvas.addEventListener("mousemove", (e) => {
+        mousePos = getMousePos(e);
+        renderCanvas(); 
+    });
     canvas.addEventListener("mouseup", () => isDrawing = false);
     canvas.addEventListener("mouseout", () => isDrawing = false);
 
-    // Set up touch events for mobile, etc
+    /* set up touch events for mobile, etc */
     canvas.addEventListener("touchstart", (e) => {
-        mousePos = getTouchPos(e);
-        let touch = e.touches[0];
-        let mouseEvent = new MouseEvent("mousedown", {
-            clientX: touch.clientX,
-            clientY: touch.clientY
-        });
-        canvas.dispatchEvent(mouseEvent);
+        e.preventDefault(); // prevent scrolling when touching the canvas
+        isDrawing = true;
+        lastPos = getTouchPos(e);
     }, false);
-
-    canvas.addEventListener("touchend", (e) => {
-        let mouseEvent = new MouseEvent("mouseup", {});
-        canvas.dispatchEvent(mouseEvent);
-    }, false);
-
     canvas.addEventListener("touchmove", (e) => {
-        let touch = e.touches[0];
-        let mouseEvent = new MouseEvent("mousemove", {
-            clientX: touch.clientX,
-            clientY: touch.clientY
-        });
-        canvas.dispatchEvent(mouseEvent);
+        e.preventDefault();
+        mousePos = getTouchPos(e);
+        renderCanvas(); 
     }, false);
-
-
-    // Prevent scrolling when touching the canvas
-    document.body.addEventListener("touchstart", (e) => {
-        if (e.target == canvas) {
-            e.preventDefault();
-        }
+    canvas.addEventListener("touchend", (e) => {
+        e.preventDefault();
+        isDrawing = false;
     }, false);
-
-    document.body.addEventListener("touchend", (e) => {
-        if (e.target == canvas) {
-            e.preventDefault();
-        }
-    }, false);
-
-    document.body.addEventListener("touchmove", (e) => {
-        if (e.target == canvas) {
-            e.preventDefault();
-        }
-    }, false);
-
 }
 
 /* Notes:
