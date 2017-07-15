@@ -15,6 +15,7 @@
 
     let isDrawing = false;
     let lastPos = { x: 0, y: 0 };
+    let mousePos = lastPos;
     let hue = 0;
     let direction = true;
 
@@ -23,17 +24,32 @@
         if (!isDrawing) return;
         console.log(e);
         ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+        mousePos = getMousePos(e);
 
         ctx.beginPath();
         ctx.moveTo(lastPos.x, lastPos.y);   // start from here
-        ctx.lineTo(e.offsetX, e.offsetY);   // go to here
+        ctx.lineTo(mousePos.x, mousePos.y); // go to here
         ctx.stroke();                       // draw! 
 
-        [lastPos.x, lastPos.y] = [e.offsetX, e.offsetY]; // update last position
+        lastPos = mousePos;
 
         changeHue();
         changeLineWidth();
         ctx.closePath();
+    }
+
+    function getMousePos(e) {
+        return {
+            x : e.offsetX,
+            y : e.offsetY
+        }
+    }
+
+    function getTouchPos(e) {
+        return {
+            x : e.touches[0].clientX,
+            y : e.touches[0].clientY
+        }
     }
 
     /* change the hue */
@@ -65,7 +81,7 @@
     /* start drawing from current position with mousedown event */
     canvas.addEventListener("mousedown", (e) => {
         isDrawing = true;
-        [lastPos.x, lastPos.y] = [e.offsetX, e.offsetY];
+        lastPos = getMousePos(e);
     });
 
     canvas.addEventListener("mousemove", draw);
@@ -74,8 +90,9 @@
 
     // Set up touch events for mobile, etc
     canvas.addEventListener("touchstart", (e) => {
-        var touch = e.touches[0];
-        var mouseEvent = new MouseEvent("mousedown", {
+        mousePos = getTouchPos(e);
+        let touch = e.touches[0];
+        let mouseEvent = new MouseEvent("mousedown", {
             clientX: touch.clientX,
             clientY: touch.clientY
         });
@@ -83,13 +100,13 @@
     }, false);
 
     canvas.addEventListener("touchend", (e) => {
-        var mouseEvent = new MouseEvent("mouseup", {});
+        let mouseEvent = new MouseEvent("mouseup", {});
         canvas.dispatchEvent(mouseEvent);
     }, false);
 
     canvas.addEventListener("touchmove", (e) => {
-        var touch = e.touches[0];
-        var mouseEvent = new MouseEvent("mousemove", {
+        let touch = e.touches[0];
+        let mouseEvent = new MouseEvent("mousemove", {
             clientX: touch.clientX,
             clientY: touch.clientY
         });
